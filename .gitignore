@@ -1,0 +1,17 @@
+# IDE and Text Editors
+.vscode/
+.idea/
+
+# Python Related
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+database.db
+
+# Environment Veriables
+.env
+
+## other
+temp/

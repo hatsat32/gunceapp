@@ -1,0 +1,11 @@
+fastapi==0.96.0
+pydantic[email]
+uvicorn
+alembic
+passlib
+python-jose
+python-dotenv
+sqlalchemy
+black
+psycopg2
+python-multipart

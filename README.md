@@ -1,2 +1,3 @@
-# gunceapp
+# GunceApp
+
 GunceApp Journal/Diary Application
