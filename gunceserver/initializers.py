@@ -1,6 +1,5 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
 from starlette.responses import JSONResponse
 
 from api import api_routes, public_router, auth_router
@@ -43,22 +42,6 @@ def init(app: FastAPI):
     init_routes(app)
     init_cors(app)
     init_exceptions(app)
-
-
-def create_app(version: str) -> FastAPI:
-    s = get_settings()
-
-    application = FastAPI(
-        title=s.APP_NAME,
-        description=s.DESCRIPTION,
-        debug=s.DEBUG,
-        version=version,
-        openapi_url=s.OPENAPI_URL,
-    )
-
-    init(application)
-
-    return application
 
 
 def create_app(version: str) -> FastAPI:

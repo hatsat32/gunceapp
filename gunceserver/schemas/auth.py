@@ -1,5 +1,4 @@
 from pydantic import BaseModel
-from typing import Optional
 from fastapi.param_functions import Form
 
 

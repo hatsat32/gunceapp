@@ -1,12 +1,11 @@
 from uuid import UUID
 from typing import List
-from fastapi import APIRouter, Depends, HTTPException, status, Body
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
-import lib.security as sec
 from core.deps import get_db
 import models
-from schemas import EntryBase, EntryCreate, EntryUpdate, EntryOut, EntryInDB, UserInDB
+from schemas import EntryCreate, EntryUpdate, EntryOut, UserInDB
 from lib.oauth2 import get_current_active_user
 
 
@@ -98,6 +97,6 @@ async def entry_delete(
     current_user: UserInDB = Depends(get_current_active_user),
 ):
     db.query(models.Entry).filter(
-        models.Entry.id == user_id, models.Entry.user_id == current
+        models.Entry.id == user_id, models.Entry.user_id == current_user
     ).delete()
     db.commit()

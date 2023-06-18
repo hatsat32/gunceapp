@@ -1,4 +1,4 @@
-from pydantic import BaseModel, SecretStr, validator, UUID4
+from pydantic import BaseModel, UUID4
 from typing import Optional
 
 from lib.security import Roles

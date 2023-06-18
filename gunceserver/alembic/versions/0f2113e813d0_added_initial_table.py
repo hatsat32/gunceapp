@@ -1,7 +1,7 @@
 """Added initial table
 
 Revision ID: 0f2113e813d0
-Revises: 
+Revises:
 Create Date: 2023-06-18 21:29:12.890150
 
 """
