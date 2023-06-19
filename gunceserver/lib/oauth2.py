@@ -77,7 +77,6 @@ def authenticate_user(db, username: str, password: str) -> UserModel:
 
 
 def create_access_token(username: str, is_active: bool, role: str = None) -> str:
-    print("role", role)
     to_encode = {"username": username, "is_active": is_active, "role": role}
     expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     to_encode.update({"exp": expire})

@@ -100,7 +100,6 @@ def read_users_me(current_user: UserInDB = Depends(get_current_active_user)):
 def login_for_access_token(
     form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)
 ) -> dict:
-    print(form_data, form_data.username, form_data.password)
     user = authenticate_user(db, form_data.username, form_data.password)
     access_token = create_access_token(
         username=user.username, role=user.role, is_active=user.is_active
