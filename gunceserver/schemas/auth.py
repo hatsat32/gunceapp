@@ -1,7 +1,6 @@
-from pydantic import BaseModel
-from fastapi.param_functions import Form
+from pydantic import BaseModel, Field
 
 
 class LoginForm(BaseModel):
-    username: str = Form()
-    serverkey: str = Form()
+    username: str = Field()
+    serverkey: str = Field()

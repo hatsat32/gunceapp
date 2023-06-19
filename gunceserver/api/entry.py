@@ -9,7 +9,11 @@ from schemas import EntryCreate, EntryUpdate, EntryOut, UserInDB
 from lib.oauth2 import get_current_active_user
 
 
-r = APIRouter(tags=["Entry"])
+r = APIRouter(
+    prefix="/api",
+    tags=["Entry"],
+    dependencies=[Depends(get_current_active_user)],
+)
 
 
 @r.get("/entries", response_model=List[EntryOut])
@@ -90,7 +94,7 @@ async def entry_update(
     return entry
 
 
-@r.delete("/entries/{user_id}")
+@r.delete("/entries/{entry_id}")
 async def entry_delete(
     user_id: UUID,
     db: Session = Depends(get_db),

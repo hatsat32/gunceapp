@@ -1,15 +1,16 @@
-from pydantic import BaseModel, UUID4
 from typing import Optional
+
+from pydantic import BaseModel, UUID4, Field
 
 from lib.security import Roles
 
 
 class UserBase(BaseModel):
-    username: str
-    serverkey: str
-    masterkey: str
-    nonce: str
-    tag: str
+    username: str = Field(min_length=6)
+    serverkey: str = Field(min_length=64, max_length=64)
+    masterkey: str = Field(min_length=64, max_length=64)
+    nonce: str = Field(min_length=24, max_length=24)
+    tag: str = Field(min_length=32, max_length=32)
 
 
 class UserCreate(UserBase):
@@ -17,10 +18,10 @@ class UserCreate(UserBase):
 
 
 class UserCangePassword(BaseModel):
-    serverkey: str
-    masterkey: str
-    nonce: str
-    tag: str
+    serverkey: str = Field(min_length=64, max_length=64)
+    masterkey: str = Field(min_length=64, max_length=64)
+    nonce: str = Field(min_length=24, max_length=24)
+    tag: str = Field(min_length=32, max_length=32)
 
 
 class UserOut(UserBase):

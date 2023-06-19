@@ -2,14 +2,14 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.responses import JSONResponse
 
-from api import api_routes, public_router, auth_router
+from api import public_router, auth_router, entry_router
 from core.exceptions import HTTPException
 from core.deps import get_settings
 
 
 def init_routes(app: FastAPI):
     app.include_router(auth_router)
-    app.include_router(api_routes)
+    app.include_router(entry_router)
     app.include_router(public_router)
 
 

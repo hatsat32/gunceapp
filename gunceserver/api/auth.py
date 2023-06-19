@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
@@ -10,7 +10,7 @@ from lib.oauth2 import (
 )
 from schemas.token import Token
 from schemas.auth import LoginForm
-from schemas.user import UserOut, UserInDB, UserCreate
+from schemas.user import UserOut, UserInDB, UserCreate, UserCangePassword
 from core.deps import get_db
 import models
 
@@ -24,7 +24,10 @@ r = APIRouter(prefix="/api", tags=["Auth"])
     summary="Register new account",
     response_description="Register new account",
 )
-async def register(user: UserCreate, db: Session = Depends(get_db)) -> dict:
+def register(
+    user: UserCreate,
+    db: Session = Depends(get_db),
+) -> dict:
     """
     Register new account
     """
@@ -43,8 +46,9 @@ async def register(user: UserCreate, db: Session = Depends(get_db)) -> dict:
 
 
 @r.post("/auth/login", response_model=Token)
-async def login(
-    form_data: LoginForm = Depends(), db: Session = Depends(get_db)
+def login(
+    form_data: LoginForm,
+    db: Session = Depends(get_db),
 ) -> dict:
     user = authenticate_user(db, form_data.username, form_data.serverkey)
     access_token = create_access_token(
@@ -53,16 +57,13 @@ async def login(
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-# -------------------------------------------------------------------
-
-
 @r.get(
     "/auth/token",
     response_model=Token,
     summary="Get auth token.",
     response_description="Get token and token type.",
 )
-async def auth(token: str = Depends(oauth2_scheme)) -> dict:
+def auth(token: str = Depends(oauth2_scheme)) -> dict:
     """
     Get auth token and token type.
     """
@@ -75,7 +76,7 @@ async def auth(token: str = Depends(oauth2_scheme)) -> dict:
     summary="Check auth status",
     response_description="Check uath status",
 )
-async def check():
+def check():
     """
     If token is still walid, reutn True, False otherwise.
     """
@@ -88,7 +89,7 @@ async def check():
     summary="Get logged in user information.",
     response_description="Logged in user.",
 )
-async def read_users_me(current_user: UserInDB = Depends(get_current_active_user)):
+def read_users_me(current_user: UserInDB = Depends(get_current_active_user)):
     """
     Get logged in user information.
     """
@@ -96,7 +97,7 @@ async def read_users_me(current_user: UserInDB = Depends(get_current_active_user
 
 
 @r.post("/auth/token", response_model=Token)
-async def login_for_access_token(
+def login_for_access_token(
     form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)
 ) -> dict:
     print(form_data, form_data.username, form_data.password)
@@ -105,3 +106,15 @@ async def login_for_access_token(
         username=user.username, role=user.role, is_active=user.is_active
     )
     return {"access_token": access_token, "token_type": "bearer"}
+
+
+@r.post("/auth/change-password", status_code=status.HTTP_204_NO_CONTENT)
+def change_password(
+    chpass: UserCangePassword,
+    current_user: UserInDB = Depends(get_current_active_user),
+    db: Session = Depends(get_db),
+):
+    db.query(models.User).filter(models.User.username == current_user.username).update(
+        chpass.dict(exclude_unset=True)
+    )
+    db.commit()
