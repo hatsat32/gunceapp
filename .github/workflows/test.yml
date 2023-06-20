@@ -33,6 +33,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
+        working-directory: gunceserver
         run: |
           python -m pip install --upgrade pip
           pip install pytest
