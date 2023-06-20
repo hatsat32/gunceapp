@@ -1,0 +1,51 @@
+name: Gunce Server Tests
+
+on: [push, pull_request]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11"]
+
+    # db service
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: gunce
+          POSTGRES_PASSWORD: gunce
+          POSTGRES_DB: guncetest
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest
+          pip install -r requirements.txt
+      - name: setup env
+        working-directory: gunceserver
+        run: |
+          mv .env.testing .env
+      - name: Run migrations
+        working-directory: gunceserver
+        run: |
+          alembic upgrade head
+      - name: Test with pytest
+        working-directory: gunceserver
+        run: |
+          pytest
