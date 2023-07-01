@@ -1,6 +1,4 @@
 import random
-import json
-from base64 import b64decode
 from starlette.testclient import TestClient
 
 randuser = random.randint(100, 1000)
@@ -22,7 +20,7 @@ class TestEntryAPI:
     def test_login(self, test_app: TestClient):
         data = {
             "username": "user_1",
-            "serverkey": "ee101456183efc93c2ebf8d23cb2914b36598e295d9e8a137ba852d53f87a3fa",
+            "serverkey": "ee101456183efc93c2ebf8d23cb2914b36598e295d9e8a137ba852d53f87a3fa",  # noqa: E501
         }
         response = test_app.post("/api/auth/login", json=data)
         global login_jwt

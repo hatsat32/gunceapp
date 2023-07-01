@@ -2,13 +2,12 @@ import pytest
 from starlette.testclient import TestClient
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
-import time
 
 from main import app
 from core.deps import get_db
 from core.db import Base
 
-SQLALCHEMY_DATABASE_URL = "postgresql://gunce:gunce@localhost/gunce_test"
+SQLALCHEMY_DATABASE_URL = "postgresql://gunce:gunce@localhost/guncetest"
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
