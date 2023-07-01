@@ -33,7 +33,7 @@ async def entry_list(
 
 
 @r.post("/entries", response_model=EntryOut, status_code=status.HTTP_201_CREATED)
-async def save_entry(
+async def entry_create(
     entry: EntryCreate,
     db: Session = Depends(get_db),
     current_user: UserInDB = Depends(get_current_active_user),
@@ -96,11 +96,11 @@ async def entry_update(
 
 @r.delete("/entries/{entry_id}")
 async def entry_delete(
-    user_id: UUID,
+    entry_id: UUID,
     db: Session = Depends(get_db),
     current_user: UserInDB = Depends(get_current_active_user),
 ):
     db.query(models.Entry).filter(
-        models.Entry.id == user_id, models.Entry.user_id == current_user
+        models.Entry.id == entry_id, models.Entry.user_id == current_user.id
     ).delete()
     db.commit()

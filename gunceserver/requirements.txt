@@ -6,6 +6,5 @@ passlib
 python-jose
 python-dotenv
 sqlalchemy
-black
 psycopg2
 python-multipart
