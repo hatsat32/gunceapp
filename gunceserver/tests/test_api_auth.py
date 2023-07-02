@@ -4,6 +4,7 @@ from starlette.testclient import TestClient
 
 login_jwt = None
 
+
 class TestAuthAPI:
     test_data = {
         "username": "user_1",
@@ -65,10 +66,10 @@ class TestAuthAPI:
 
         # chagne pass
         chpass_data = {
-            "serverkey": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-            "masterkey": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "serverkey": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",  # noqa: E501
+            "masterkey": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",  # noqa: E501
             "nonce": "cccccccccccccccccccccccc",
-            "tag": "dddddddddddddddddddddddddddddddd"
+            "tag": "dddddddddddddddddddddddddddddddd",
         }
         response = test_app.post(
             "/api/auth/change-password",
@@ -85,7 +86,6 @@ class TestAuthAPI:
         response = test_app.post("/api/auth/login", json=new_login_data)
         # login_jwt: str = response.json()["access_token"]
         assert response.status_code == 200
-
 
     def test_auth_me(self, test_app: TestClient):
         # first login
