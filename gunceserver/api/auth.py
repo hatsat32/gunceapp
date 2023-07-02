@@ -113,7 +113,9 @@ def change_password(
     current_user: UserInDB = Depends(get_current_active_user),
     db: Session = Depends(get_db),
 ):
-    db.query(models.User).filter(models.User.username == current_user.username).update(
-        chpass.dict(exclude_unset=True)
-    )
+    user = db.query(models.User).filter(models.User.username == current_user.username).first()
+    user.masterkey = chpass.masterkey
+    user.nonce = chpass.nonce
+    user.tag = chpass.tag
+    user.set_serverkey(chpass.serverkey)
     db.commit()
