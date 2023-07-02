@@ -30,7 +30,8 @@ class UserOut(UserBase):
         orm_mode = True
 
 
-class UserInDB(UserOut):
+class UserInDB(UserBase):
     id: UUID4
     role: Optional[Roles]
     is_active: Optional[bool] = True
+    serverkey: str = Field(max_length=255)
