@@ -1,9 +1,10 @@
 from uuid import UUID
 from typing import List
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 
 from core.deps import get_db
+from core.exceptions import NOT_FOUND_EXCEPTION, UNAUTHORIZED_EXCEPTION
 import models
 from schemas import EntryCreate, EntryUpdate, EntryOut, UserInDB
 from lib.oauth2 import get_current_active_user
@@ -16,7 +17,11 @@ r = APIRouter(
 )
 
 
-@r.get("/entries", response_model=List[EntryOut])
+@r.get(
+    "/entries",
+    response_model=List[EntryOut],
+    status_code=status.HTTP_200_OK,
+)
 async def entry_list(
     skip: int = 0,
     limit: int = 100,
@@ -32,7 +37,11 @@ async def entry_list(
     )
 
 
-@r.post("/entries", response_model=EntryOut, status_code=status.HTTP_201_CREATED)
+@r.post(
+    "/entries",
+    response_model=EntryOut,
+    status_code=status.HTTP_201_CREATED,
+)
 async def entry_create(
     entry: EntryCreate,
     db: Session = Depends(get_db),
@@ -54,7 +63,11 @@ async def entry_create(
     return db_entry
 
 
-@r.get("/entries/{entry_id}", response_model=EntryOut)
+@r.get(
+    "/entries/{entry_id}",
+    response_model=EntryOut,
+    status_code=status.HTTP_200_OK,
+)
 async def entry_detail(
     entry_id: UUID,
     db: Session = Depends(get_db),
@@ -63,14 +76,18 @@ async def entry_detail(
     entry = db.query(models.Entry).filter(models.Entry.id == entry_id).first()
 
     if entry.user_id != current_user.id:
-        raise HTTPException(status_code=403, detail="Unauthorized")
+        raise UNAUTHORIZED_EXCEPTION
 
     if entry is None:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise NOT_FOUND_EXCEPTION
     return entry
 
 
-@r.put("/entries/{entry_id}", response_model=EntryOut)
+@r.put(
+    "/entries/{entry_id}",
+    response_model=EntryOut,
+    status_code=status.HTTP_200_OK,
+)
 async def entry_update(
     entry_id: UUID,
     entry_update: EntryUpdate,
@@ -80,10 +97,10 @@ async def entry_update(
     entry = db.query(models.Entry).filter(models.Entry.id == entry_id).first()
 
     if not entry:
-        raise HTTPException(status.HTTP_404_NOT_FOUND)
+        raise NOT_FOUND_EXCEPTION
 
     if entry.user_id != current_user.id:
-        raise HTTPException(status_code=403, detail="Unauthorized")
+        raise UNAUTHORIZED_EXCEPTION
 
     db.query(models.Entry).filter(models.Entry.id == entry_id).update(
         entry_update.dict(exclude_unset=True)
@@ -94,8 +111,11 @@ async def entry_update(
     return entry
 
 
-@r.delete("/entries/{entry_id}")
-async def entry_delete(
+@r.delete(
+    "/entries/{entry_id}",
+    status_code=status.HTTP_200_OK,
+)
+def entry_delete(
     entry_id: UUID,
     db: Session = Depends(get_db),
     current_user: UserInDB = Depends(get_current_active_user),

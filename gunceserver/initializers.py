@@ -1,9 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from starlette.responses import JSONResponse
 
 from api import public_router, auth_router, entry_router
-from core.exceptions import HTTPException
 from core.deps import get_settings
 
 
@@ -28,20 +26,9 @@ def init_cors(app: FastAPI):
     )
 
 
-def init_exceptions(app: FastAPI):
-    @app.exception_handler(HTTPException)
-    def app_exception_handler(exc: HTTPException) -> JSONResponse:
-        return JSONResponse(
-            {"detail": exc.detail, "message": exc.message},
-            status_code=exc.status_code,
-            headers=exc.headers,
-        )
-
-
 def init(app: FastAPI):
     init_routes(app)
     init_cors(app)
-    init_exceptions(app)
 
 
 def create_app(version: str) -> FastAPI:
