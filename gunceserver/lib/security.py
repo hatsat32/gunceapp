@@ -1,5 +1,4 @@
 import enum
-from passlib.pwd import genword
 from passlib.hash import argon2
 
 
@@ -17,8 +16,3 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 def get_password_hash(password: str) -> str:
     """Get argon2id password hash from password."""
     return argon2.hash(password)
-
-
-def generate_password():
-    """Generate random password."""
-    return genword()
