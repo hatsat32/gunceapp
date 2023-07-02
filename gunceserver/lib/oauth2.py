@@ -9,7 +9,7 @@ from schemas.user import UserInDB
 from models import User as UserModel
 from core.deps import get_db
 from core.deps import get_settings
-from .security import verify_password
+from .security import verify_serverkey
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/token")
@@ -70,7 +70,7 @@ def authenticate_user(db: Session, username: str, password: str) -> UserModel:
 
     if not user:
         raise loginexception
-    if not verify_password(password, user.serverkey):
+    if not verify_serverkey(password, user.serverkey):
         raise loginexception
 
     return user

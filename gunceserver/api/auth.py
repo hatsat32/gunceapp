@@ -33,11 +33,11 @@ def register(
     """
     db_user = models.User(
         username=user.username,
-        serverkey=user.serverkey,
         masterkey=user.masterkey,
         nonce=user.nonce,
         tag=user.tag,
     )
+    db_user.set_serverkey(user.serverkey)
 
     db.add(db_user)
     db.commit()

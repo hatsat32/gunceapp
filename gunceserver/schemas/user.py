@@ -7,14 +7,13 @@ from lib.security import Roles
 
 class UserBase(BaseModel):
     username: str = Field(min_length=6)
-    serverkey: str = Field(min_length=64, max_length=64)
     masterkey: str = Field(min_length=64, max_length=64)
     nonce: str = Field(min_length=24, max_length=24)
     tag: str = Field(min_length=32, max_length=32)
 
 
 class UserCreate(UserBase):
-    pass
+    serverkey: str = Field(min_length=64, max_length=64)
 
 
 class UserCangePassword(BaseModel):

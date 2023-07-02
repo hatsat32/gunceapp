@@ -7,12 +7,11 @@ class Roles(str, enum.Enum):
     user: str = "user"
 
 
-def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """Return True if password is true. False otherwise."""
-    # return argon2.verify(plain_password, hashed_password)
-    return plain_password == hashed_password
+def verify_serverkey(plain_serverkey: str, hashed_serverkey: str) -> bool:
+    """Return True if serverkey is true. False otherwise."""
+    return argon2.verify(plain_serverkey, hashed_serverkey)
 
 
-def get_password_hash(password: str) -> str:
+def get_serverkey_hash(serverkey: str) -> str:
     """Get argon2id password hash from password."""
-    return argon2.hash(password)
+    return argon2.hash(serverkey)

@@ -1,8 +1,8 @@
-"""Added initial table
+"""Added initial tables
 
-Revision ID: 0f2113e813d0
+Revision ID: 18ce144b662c
 Revises:
-Create Date: 2023-06-18 21:29:12.890150
+Create Date: 2023-07-02 16:07:55.772576
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = "0f2113e813d0"
+revision = "18ce144b662c"
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -22,7 +22,7 @@ def upgrade() -> None:
         "users",
         sa.Column("id", sa.UUID(), nullable=False),
         sa.Column("username", sa.String(), nullable=True),
-        sa.Column("serverkey", sa.String(length=64), nullable=True),
+        sa.Column("serverkey", sa.String(length=255), nullable=True),
         sa.Column("masterkey", sa.String(length=64), nullable=True),
         sa.Column("nonce", sa.String(length=24), nullable=True),
         sa.Column("tag", sa.String(length=32), nullable=True),
