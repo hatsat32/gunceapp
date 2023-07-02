@@ -32,11 +32,22 @@ class TestAuthAPI:
         assert user == "user_1"
 
     def test_login_with_wrong_credentials(self, test_app: TestClient):
+        # test with wron username
         response = test_app.post(
             "/api/auth/login",
             json={
                 "username": "user_2",
                 "serverkey": "ee101456183efc93c2ebf8d23cb2914b36598e295d9e8a137ba852d53f87a3fa",  # noqa: E501
+            },
+        )
+        assert response.status_code == 401
+
+        # test with wrong password
+        response = test_app.post(
+            "/api/auth/login",
+            json={
+                "username": "user_1",
+                "serverkey": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",  # noqa: E501
             },
         )
         assert response.status_code == 401
