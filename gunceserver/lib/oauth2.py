@@ -59,7 +59,7 @@ async def get_current_active_user(
     return current_user
 
 
-def authenticate_user(db, username: str, password: str) -> UserModel:
+def authenticate_user(db: Session, username: str, password: str) -> UserModel:
     user: UserModel = db.query(UserModel).filter(UserModel.username == username).first()
 
     loginexception = HTTPException(
